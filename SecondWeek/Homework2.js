@@ -15,8 +15,8 @@ var ExcelToJSON = function() {
           document.getElementById('output').innerHTML = '';
           calculateFrequency(XL_row_object, "Age", "frequencyAge");
           calculateFrequency(XL_row_object, "height", "frequencyheight");
-          calculateFrequency(XL_row_object, "Country", "frequencyCountry");
-          calculateJointDistribution(XL_row_object, "Country", "Age", "jointDistributionCountryAge");
+          calculateFrequency(XL_row_object, "Sports", "frequencySports");
+          calculateJointDistribution(XL_row_object, "Sports", "Age", "jointDistributionSportsAge");
         });
 
       };

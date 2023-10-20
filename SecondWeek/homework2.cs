@@ -33,8 +33,8 @@ class Program{
                     DisplayDataInTable(data);
                     CalculateFrequency(data, "Age", "frequencyAge");
                     CalculateFrequency(data, "height", "frequencyheight");
-                    CalculateFrequency(data, "Country", "frequencyCountry");
-                    CalculateJointDistribution(data, "Country", "Age", "jointDistributionCountryAge");
+                    CalculateFrequency(data, "Sports", "frequencySports");
+                    CalculateJointDistribution(data, "Sports", "Age", "jointDistributionSportsAge");
                 }
                 else
                 {
