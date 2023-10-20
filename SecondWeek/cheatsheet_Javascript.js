@@ -1,6 +1,6 @@
 //---------------------------------ARRAY-------------------------------------------------------
 
-// Creazione di un array
+//creazione di un array
 var myArray = [1, 2, 3, 4, 5];
 
 // Loop con break e continue
@@ -10,7 +10,7 @@ for (var i = 0; i < myArray.length; i++) {
     break;
   }
 
-  // Usa continue per saltare un'iterazione in base a una condizione
+  // Uso di continue per saltare un'iterazione in base a una condizione
   if (myArray[i] === 2) {
     continue;
   }
@@ -74,11 +74,11 @@ var dictionary = {
     }
   }
   
-  // Aggiungi un elemento
+  // Aggiunta di un elemento
   dictionary["key4"] = "value4";
   console.log("Elemento con chiave key4: " + dictionary["key4"]);
   
-  // Rimuovi un elemento
+  // Rimozione di un elemento
   delete dictionary["key2"];
   console.log("Elemento con chiave key2 rimosso.");
   
@@ -107,7 +107,7 @@ var sortedList = [
     console.log(sortedList[i].key + ": " + sortedList[i].value);
   }
   
-  // Aggiungi un elemento in modo ordinato
+  // Aggiunta di un elemento in modo ordinato
   function addElement(key, value) {
     for (var i = 0; i < sortedList.length; i++) {
       if (key < sortedList[i].key) {
@@ -121,7 +121,7 @@ var sortedList = [
   addElement("key4", "value4");
   console.log("Elemento con chiave key4 aggiunto.");
   
-  // Rimuovi un elemento
+  // Rimozione di un elemento
   function removeElement(key) {
     for (var i = 0; i < sortedList.length; i++) {
       if (sortedList[i].key === key) {
@@ -147,7 +147,7 @@ var sortedList = [
   console.log("Elemento con chiave key1: " + keyValue);
 
   //----------------------------------------------------------------------------HASH SET---------------------------------------------------------------
-  // Inizializza un oggetto per simulare un HashSet
+  // Inizializzazione di un oggetto per simulare un HashSet
 var hashSet = {};
 
 // Aggiungi elementi
@@ -318,12 +318,6 @@ if (esiste2) {
     console.log("L'elemento '" + elementoCercato2 + "' non esiste nello stack.");
 }
 
-
-if (esiste) {
-    console.log("L'elemento '" + elementoCercato + "' esiste nello stack.");
-} else {
-    console.log("L'elemento '" + elementoCercato + "' non esiste nello stack.");
-}
 
 //---------------------------------------------------------LINKED LIST----------------------------------------------------
 
