@@ -3,8 +3,7 @@ using System.Data;
 using System.IO;
 using ExcelDataReader;
 
-class Program
-{
+class Program{
     static void Main(string[] args)
     {
         Console.WriteLine("Inserisci il percorso del file Excel (.xlsx):");
