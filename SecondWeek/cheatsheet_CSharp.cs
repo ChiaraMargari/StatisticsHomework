@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 
 //-----------------------------------------------------ARRAY--------------------------------------------
-class Array
-{
+
     
         // Creazione di un array
         int[] myArray = { 1, 2, 3, 4, 5 };
@@ -44,10 +43,10 @@ class Array
         {
             Console.WriteLine("L'elemento all'indice " + indexToCheck + " esiste: " + myArray[indexToCheck]);
         }
-}
+
 
 //------------------------------------------------------LIST---------------------------------------------------
-Class List{
+
 
         // Creazione di una lista
         List<int> myList = new List<int> { 1, 2, 3, 4, 5 };
@@ -75,10 +74,10 @@ Class List{
         {
             Console.WriteLine("L'elemento all'indice " + indexToCheck + " esiste: " + myList[indexToCheck]);
         }
-}
+
 
 //--------------------------------------------------------------------DIZIONARIO------------------------------------------------
-Class Dictionary{      
+     
         
         // Crea un oggetto Dictionary
         Dictionary<string, string> dictionary = new Dictionary<string, string>
@@ -108,10 +107,10 @@ Class Dictionary{
         {
             Console.WriteLine(keyToCheck + " esiste.");
         }
-}
+
 
 //----------------------------------------------------------------SORTED LIST----------------------------------------------------------------
-Class SortedList{
+
         SortedList sortedList = new SortedList();
 
         // Aggiungi elementi
@@ -147,10 +146,10 @@ Class SortedList{
         {
             Console.WriteLine("Chiave key1 non trovata.");
         }
-}
+
 
 //------------------------------------------------------------HASH SET---------------------------------------------------------------------
-class HashSet{
+
         // Inizializza un HashSet
         var hashSet = new HashSet<string>();
 
@@ -193,10 +192,10 @@ class HashSet{
         {
             Console.WriteLine("Chiave value1 non trovata.");
         }
-}
+
 
 //----------------------------------------------------------------------SORTED SET-------------------------------------------------------------------
-class SortedList{
+
         // Inizializza un set ordinato (emulato)
         var sortedSet = new SortedSet<string>();
 
@@ -231,10 +230,10 @@ class SortedList{
             Console.WriteLine("Chiave value1 esiste.");
         else
             Console.WriteLine("Chiave value1 non trovata.");
-}
+
         
 //------------------------------------------------------------------QUEUE----------------------------------------------------------------------------
-class Queue{
+
         // Inizializza una coda
         Queue queue = new Queue();
 
@@ -278,10 +277,10 @@ class Queue{
         {
             Console.WriteLine("L'elemento '" + elementoCercato + "' non esiste nella coda.");
         }
-}
+
 
 //---------------------------------------------------------STACK-----------------------------------------------------------
-class Stack{
+
         Stack stack = new Stack();
 
         // Aggiungi elementi allo Stack
@@ -314,7 +313,7 @@ class Stack{
         string elementoCercato = "Elemento1";
         bool esiste = stack.Contains(elementoCercato);
         Console.WriteLine($"\nL'elemento '{elementoCercato}' {(esiste ? "esiste" : "non esiste")} nello Stack."); 
-}
+
 
 //----------------------------------------------------------LINKED LIST-------------------------------------------
 class Node<T>
