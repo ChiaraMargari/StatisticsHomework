@@ -1,106 +1,179 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Simulazione dei punteggi</title>
-    <style>
-       
-        #frame {
-            border: 1px solid #000;
-            width: 400px; /* Larghezza iniziale del frame */
-            height: 200px; /* Altezza iniziale del frame */
-            resize: both;
-            overflow: auto;
-        }
-        .istogramma-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            border-top: 1px solid #000;
-            height: 100%;
-        }
-        .barra {
-            flex: 1;
-            background-color: blue;
-            margin: 1px;
-        }
-    </style>
+    <title>System Simulation</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1>Risultati della simulazione</h1>
-    <div id="risultati"></div>
-    <div id="frame">
-        <!-- Aggiungi un contenitore per l'istogramma -->
-        <div id="istogramma"></div>
+    <h1>System Simulation</h1>
+
+    <label for="numSystems">Number of Systems (M):</label>
+    <input type="number" id="numSystems" value="5"><br><br>
+
+    <label for="numAttacks">Number of Attacks (N):</label>
+    <input type="number" id="numAttacks" value="10"><br><br>
+
+    <label for="penetrationProbability">Penetration Probability (p):</label>
+    <input type="number" id="penetrationProbability" value="0.2"><br><br>
+
+    <button onclick="simulateSystems()">Simulate</button><br><br>
+
+    <div class="chart-container">
+        <canvas id="cumulativeChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="relativeChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="normalizedChart"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="histogramChart"></canvas>
     </div>
 
     <script>
-        const M = 5; // Numero di sistemi di sicurezza
-        const N = 10; // Numero di attacchi
-        const p = 0.3; // Probabilità di penetrazione costante
+        function simulateSystems() {
+            const numSystems = parseInt(document.getElementById("numSystems").value);
+            const numAttacks = parseInt(document.getElementById("numAttacks").value);
+            const penetrationProbability = parseFloat(document.getElementById("penetrationProbability").value);
 
-        // Inizializza l'array dei punteggi per ogni sistema
-        const scores = new Array(M).fill(0);
+            const cumulativeCanvas = document.getElementById("cumulativeChart").getContext("2d");
+            const relativeCanvas = document.getElementById("relativeChart").getContext("2d");
+            const normalizedCanvas = document.getElementById("normalizedChart").getContext("2d");
+            const histogramCanvas = document.getElementById("histogramChart").getContext("2d");
 
-        // Calcola i dati per le quattro distribuzioni
-        const cumulatedFrequency = [];
-        const relativeFrequency = [];
-        const normalizedRatio = [];
+            const cumulativeFrequency = simulateCumulativeFrequency(numSystems, numAttacks, penetrationProbability);
+            createCumulativeChart(cumulativeCanvas, cumulativeFrequency);
+            
+            const relativeFrequency = simulateRelativeFrequency(cumulativeFrequency, numAttacks);
+            createRelativeChart(relativeCanvas, relativeFrequency);
+            
+            const normalizedFrequency = simulateNormalizedFrequency(cumulativeFrequency, numAttacks);
+            createNormalizedChart(normalizedCanvas, normalizedFrequency);
+            
+            const histogramData = simulateHistogramData(cumulativeFrequency);
+            createHistogramChart(histogramCanvas, histogramData);
+        }
 
-        for (let attack = 0; attack < N; attack++) {
-            let cumulativePenetration = 0;
-            for (let system = 0; system < M; system++) {
-                const outcome = Math.random();
-                if (outcome <= p) {
-                    scores[system] -= 1;
-                    cumulativePenetration += 1;
-                } else {
-                    scores[system] += 1;
+        function simulateCumulativeFrequency(numSystems, numAttacks, penetrationProbability) {
+            const cumulativeFrequency = new Array(numAttacks).fill(0);
+
+            for (let systemIndex = 0; systemIndex < numSystems; systemIndex++) {
+                let f = 0;
+
+                for (let attack = 0; attack < numAttacks; attack++) {
+                    if (Math.random() < penetrationProbability) {
+                        f++;
+                    }
+
+                    cumulativeFrequency[attack] += f;
                 }
             }
-            cumulatedFrequency.push(cumulativePenetration);
-            relativeFrequency.push(cumulativePenetration / (attack + 1));
-            normalizedRatio.push(cumulativePenetration / Math.sqrt(attack + 1));
+
+            return cumulativeFrequency;
         }
 
-        // Riferimento all'elemento HTML in cui visualizzerai i risultati
-        const risultatiDiv = document.getElementById("risultati");
-
-        // Creazione di un elemento <p> per ogni punteggio e aggiunta al div dei risultati
-        for (let system = 0; system < M; system++) {
-            const punteggio = scores[system];
-            const risultatoElement = document.createElement("p");
-            risultatoElement.textContent = `Punteggio del sistema ${system + 1}: ${punteggio}`;
-            risultatiDiv.appendChild(risultatoElement);
+        function simulateRelativeFrequency(cumulativeFrequency, numAttacks) {
+            return cumulativeFrequency.map(value => value / numAttacks);
         }
 
-        // Visualizza l'istogramma all'interno del frame
-        const istogrammaDiv = document.getElementById("istogramma");
-        istogrammaDiv.style.width = "100%"; // L'istogramma riempirà tutto il frame
-
-        // Funzione per creare un istogramma
-        function createHistogram(data, title) {
-            const istogrammaContainer = document.createElement("div");
-            istogrammaContainer.classList.add("istogramma-container");
-
-            for (let i = 0; i < N; i++) {
-                const barra = document.createElement("div");
-                barra.classList.add("barra");
-                barra.style.height = `${(data[i] * 5)}px`; // Scala per una migliore visualizzazione
-                istogrammaContainer.appendChild(barra);
-            }
-
-            // Aggiungi il titolo dell'istogramma
-            const titolo = document.createElement("p");
-            titolo.textContent = title;
-            istogrammaContainer.appendChild(titolo);
-
-            istogrammaDiv.appendChild(istogrammaContainer);
+        function simulateNormalizedFrequency(cumulativeFrequency, numAttacks) {
+            return cumulativeFrequency.map(value => value / Math.sqrt(numAttacks));
         }
 
-        // Crea gli istogrammi per le quattro distribuzioni
-        createHistogram(cumulatedFrequency, "Cumulated Frequency");
-        createHistogram(relativeFrequency, "Relative Frequency (f/number of attacks)");
-        createHistogram(normalizedRatio, "Normalized Ratio (f/ √number of attacks)");
+        function simulateHistogramData(cumulativeFrequency) {
+            return cumulativeFrequency;
+        }
+
+        // Funzioni per creare i grafici utilizzando Chart.js
+        function createCumulativeChart(ctx, data) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: data.length }, (_, i) => i + 1),
+                    datasets: [{
+                        label: 'Cumulative Frequency',
+                        data: data,
+                        borderColor: 'blue',
+                        fill: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
+        }
+
+        function createRelativeChart(ctx, data) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: data.length }, (_, i) => i + 1),
+                    datasets: [{
+                        label: 'Relative Frequency',
+                        data: data,
+                        borderColor: 'green',
+                        fill: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
+        }
+
+        function createNormalizedChart(ctx, data) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: data.length }, (_, i) => i + 1),
+                    datasets: [{
+                        label: 'Normalized Ratio',
+                        data: data,
+                        borderColor: 'red',
+                        fill: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
+        }
+
+        function createHistogramChart(ctx, data) {
+            const barData = {
+                labels: Array.from({ length: data.length }, (_, i) => i + 1),
+                datasets: [{
+                    label: 'Histogram',
+                    backgroundColor: 'purple',
+                    data: data,
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: barData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                        },
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                }
+            });
+        }
+
+        // Chiamata iniziale per generare i grafici iniziali
+        simulateSystems();
     </script>
 </body>
 </html>
