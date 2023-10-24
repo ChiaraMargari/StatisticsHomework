@@ -13,7 +13,7 @@
     <label for="numAttacks">Number of Attacks (N):</label>
     <input type="number" id="numAttacks" value="10"><br><br>
 
-    <label for="penetrationProbability">Penetration Probability (p):</label>
+    <label for "penetrationProbability">Penetration Probability (p):</label>
     <input type="number" id="penetrationProbability" value="0.2"><br><br>
 
     <button onclick="simulateSystems()">Simulate</button><br><br>
@@ -32,27 +32,40 @@
     </div>
 
     <script>
+        // Variabili globali per mantenere le istanze dei grafici
+        let cumulativeChart, relativeChart, normalizedChart, histogramChart;
+
         function simulateSystems() {
+            // Ottieni i nuovi dati
             const numSystems = parseInt(document.getElementById("numSystems").value);
             const numAttacks = parseInt(document.getElementById("numAttacks").value);
             const penetrationProbability = parseFloat(document.getElementById("penetrationProbability").value);
 
-            const cumulativeCanvas = document.getElementById("cumulativeChart").getContext("2d");
-            const relativeCanvas = document.getElementById("relativeChart").getContext("2d");
-            const normalizedCanvas = document.getElementById("normalizedChart").getContext("2d");
-            const histogramCanvas = document.getElementById("histogramChart").getContext("2d");
+            // Elimina i grafici esistenti se presenti
+            if (cumulativeChart) {
+                cumulativeChart.destroy();
+            }
+            if (relativeChart) {
+                relativeChart.destroy();
+            }
+            if (normalizedChart) {
+                normalizedChart.destroy();
+            }
+            if (histogramChart) {
+                histogramChart.destroy();
+            }
 
+            // Simula i dati
             const cumulativeFrequency = simulateCumulativeFrequency(numSystems, numAttacks, penetrationProbability);
-            createCumulativeChart(cumulativeCanvas, cumulativeFrequency);
-            
             const relativeFrequency = simulateRelativeFrequency(cumulativeFrequency, numAttacks);
-            createRelativeChart(relativeCanvas, relativeFrequency);
-            
             const normalizedFrequency = simulateNormalizedFrequency(cumulativeFrequency, numAttacks);
-            createNormalizedChart(normalizedCanvas, normalizedFrequency);
-            
             const histogramData = simulateHistogramData(cumulativeFrequency);
-            createHistogramChart(histogramCanvas, histogramData);
+
+            // Crea e mostra i nuovi grafici
+            cumulativeChart = createCumulativeChart("cumulativeChart", cumulativeFrequency);
+            relativeChart = createRelativeChart("relativeChart", relativeFrequency);
+            normalizedChart = createNormalizedChart("normalizedChart", normalizedFrequency);
+            histogramChart = createHistogramChart("histogramChart", histogramData);
         }
 
         function simulateCumulativeFrequency(numSystems, numAttacks, penetrationProbability) {
@@ -86,8 +99,9 @@
         }
 
         // Funzioni per creare i grafici utilizzando Chart.js
-        function createCumulativeChart(ctx, data) {
-            new Chart(ctx, {
+        function createCumulativeChart(chartId, data) {
+            var ctx = document.getElementById(chartId).getContext('2d');
+            cumulativeChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: Array.from({ length: data.length }, (_, i) => i + 1),
@@ -103,10 +117,13 @@
                     maintainAspectRatio: false,
                 }
             });
+
+            return cumulativeChart;
         }
 
-        function createRelativeChart(ctx, data) {
-            new Chart(ctx, {
+        function createRelativeChart(chartId, data) {
+            var ctx = document.getElementById(chartId).getContext('2d');
+            relativeChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: Array.from({ length: data.length }, (_, i) => i + 1),
@@ -122,10 +139,13 @@
                     maintainAspectRatio: false,
                 }
             });
+
+            return relativeChart;
         }
 
-        function createNormalizedChart(ctx, data) {
-            new Chart(ctx, {
+        function createNormalizedChart(chartId, data) {
+            var ctx = document.getElementById(chartId).getContext('2d');
+            normalizedChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: Array.from({ length: data.length }, (_, i) => i + 1),
@@ -141,9 +161,12 @@
                     maintainAspectRatio: false,
                 }
             });
+
+            return normalizedChart;
         }
 
-        function createHistogramChart(ctx, data) {
+        function createHistogramChart(chartId, data) {
+            var ctx = document.getElementById(chartId).getContext('2d');
             const barData = {
                 labels: Array.from({ length: data.length }, (_, i) => i + 1),
                 datasets: [{
@@ -153,7 +176,7 @@
                 }]
             };
 
-            new Chart(ctx, {
+            histogramChart = new Chart(ctx, {
                 type: 'bar',
                 data: barData,
                 options: {
@@ -170,10 +193,9 @@
                     },
                 }
             });
-        }
 
-        // Chiamata iniziale per generare i grafici iniziali
-        simulateSystems();
+            return histogramChart;
+        }
     </script>
 </body>
 </html>
